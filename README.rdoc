@@ -4,7 +4,7 @@ Easily switch your current git user info.  Handy for work and personal repositor
 
 == Install
 
-gem install gitswitch
+  gem install gitswitch
 
 == Usage
 
@@ -15,11 +15,11 @@ Add a new git user tag
   gitswitch -a
 
 Set specific user info to your current git repository
-	gitswitch -r work
-	gitswitch -r  # Sets your 'default' tag if you don't specify a tag
+  gitswitch -r work
+  gitswitch -r  # Sets your 'default' tag if you don't specify a tag
 
 List all the gitswitch user tags/info you have stored
-	gitswitch -l
+  gitswitch -l
 
 == Copyright
 

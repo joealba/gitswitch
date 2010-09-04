@@ -1,6 +1,6 @@
 = gitswitch
 
-Description goes here.
+Easily switch your current git user info for work and personal repositories
 
 == Note on Patches/Pull Requests
  

@@ -21,6 +21,14 @@ Set specific user info to your current git repository
 List all the gitswitch user tags/info you have stored
   gitswitch -l
 
+  Current git user options --
+	default:
+	  Name:   Joe Alba
+	  E-mail: joe@home.com
+	work:
+	  Name:   Joe Alba
+	  E-mail: jalba@work.com
+
 == Copyright
 
 Copyright (c) 2010 Joe Alba. See LICENSE for details.

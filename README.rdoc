@@ -2,6 +2,8 @@
 
 Easily switch your current git user info.  Handy for work and personal repositories.  Also might come in handy for switching between users while pair programming.
 
+Would you rather type "git config user.email 'me@work.com'", etc. or type "gitswitch -r work"?  If you answered the latter, check out this gem.
+
 == Install
 
   gem install gitswitch

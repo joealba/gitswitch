@@ -16,9 +16,9 @@ Simply run the script to establish a default ~/.gitswitch file using the git inf
 Add a new git user tag
   gitswitch -a
 
-Set specific user info to your current git repository
-  gitswitch -r work
-  gitswitch -r  # Sets your 'default' tag if you don't specify a tag
+Set specific user info to your current git repository by updating .git/config
+  gitswitch -r work  # Update .git/config with your 'work' git user info
+  gitswitch -r       # User info from your 'default' tag is used if you don't specify a tag
 
 List all the gitswitch user tags/info you have stored
   gitswitch -l

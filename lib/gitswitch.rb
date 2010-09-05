@@ -1,5 +1,6 @@
-require "optparse"
-require "yaml"
+require 'optparse'
+require 'yaml'
+#require 'escape'
 
 class GitSwitch
   VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION.yml"
@@ -26,7 +27,6 @@ class GitSwitch
         puts "Ok, that's fine.  Exiting." and exit
       end
     end
-
   end
 
 
@@ -63,7 +63,7 @@ class GitSwitch
         puts parser and exit
       end
 
-      o.on "-o", "--overwrite", "Overwrite/create a .gitswitch file using your current git user info as default" do
+      o.on "-o", "--overwrite", "Overwrite/create a .gitswitch file using your global git user info as default" do
         create_gitswitch_file
         print_info and exit
       end
@@ -77,7 +77,6 @@ class GitSwitch
       end      
     end
     
-
     begin
       parser.parse! args
     rescue OptionParser::InvalidOption => error
@@ -91,12 +90,12 @@ class GitSwitch
 
   # Create a .gitswitch file with the current user defaults
   def create_gitswitch_file
-    current_git_user = get_current_git_user
-    if current_git_user[:name].empty? && current_git_user[:email].empty?
+    user = get_global_git_user
+    if user[:name].empty? && user[:email].empty?
       puts "ERROR: You must set up a default git user.name and user.email first."
     else
-      puts "Adding your current git user info to the \"default\" tag..."
-      set_gitswitch_entry('default', current_git_user[:email], current_git_user[:name])
+      puts "Adding your global git user info to the \"default\" tag..."
+      set_gitswitch_entry('default', user[:email], user[:name])
       save_gitswitch_file
     end
   end
@@ -122,18 +121,32 @@ class GitSwitch
     save_gitswitch_file
   end
 
+
+  def get_user(tag)     
+    if @users.empty? || @users[tag].empty? || @users[tag][:email].to_s.empty?
+      return false
+    end
+    @users[tag]
+  end
+
+
+  def git_config(user, args = {})
+    git_args = 'config --replace-all'
+    git_args += ' --global' if args[:global]
+    
+    %x(#{GIT_BIN} #{git_args} user.email #{user[:email].to_s.shellescape})
+    %x(#{GIT_BIN} #{git_args} user.name #{user[:name].to_s.shellescape}) if !user[:name].to_s.empty?
+  end
+
   
   # Switch git user in your global .gitconfig file
   # ==== Parameters
   # * +tag+ - The tag associated with your desired git info in .gitswitch.  Defaults to "default".
   def switch_global_user tag = "default"
+    user = get_user(tag) or raise "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
     puts "Switching git user to \"#{tag}\" tag..."
-    if !@users[tag].empty? && !@users[tag][:email].to_s.empty?
-      %x(#{GIT_BIN} config --replace-all --global user.name '#{@users[tag][:name]}') if !@users[tag][:name].to_s.empty?
-      %x(#{GIT_BIN} config --replace-all --global user.email '#{@users[tag][:email]}')
-    else
-      puts "ERROR: Could not find info for tag #{tag} in your .gitswitch file"
-    end
+    git_config(user, {:global => true})
+#   puts "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
   end
 
 
@@ -141,28 +154,25 @@ class GitSwitch
   # ==== Parameters
   # * +tag+ - The tag associated with your desired git info in .gitswitch. Defaults to "default".
   def switch_repo_user tag = "default"
-    puts "Switching git user to \"#{tag}\" tag..."
-    if !@users[tag].empty? && !@users[tag][:email].to_s.empty?
-      %x(#{GIT_BIN} config --replace-all user.name '#{@users[tag][:name]}') if !@users[tag][:name].to_s.empty?
-      %x(#{GIT_BIN} config --replace-all user.email '#{@users[tag][:email]}')
-    else
-      puts "ERROR: Could not find info for tag #{tag} in your .gitswitch file"
-    end
+    user = get_user(tag) or raise "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
+    puts "Switching git user to \"#{tag}\" tag for the current repository..."
+    git_config(user) or raise "Could not set your repo"
+#   puts "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
   end
   
   
   # Add a user entry to your .gitswitch file
   def add_gitswitch_entry
     print "What tag would you like to set to this git user? "
-    tag = gets.chomp
+    tag = gets.gsub(/\W+/,'')
       
     print "E-mail address: "
     email = gets.chomp
 
-    print "Name: (ENTER to use \"" + get_current_git_user()[:name] + "\") "
+    print "Name: (ENTER to use \"" + get_global_git_user()[:name] + "\") "
     name = gets.chomp
     if name.empty?
-      name = get_current_git_user()[:name]
+      name = get_global_git_user()[:name]
     end
     set_gitswitch_entry(tag, email, name)
   end
@@ -203,10 +213,19 @@ class GitSwitch
 
   # Show the current git user info
   def get_current_git_user
-    user = {
+    {
       :name => %x(#{GIT_BIN} config --get user.name).to_s.chomp,
       :email => %x(#{GIT_BIN} config --get user.email).to_s.chomp
     } 
   end
+
+  # Show the global config git user info
+  def get_global_git_user
+    {
+      :name => %x(#{GIT_BIN} config --global --get user.name).to_s.chomp,
+      :email => %x(#{GIT_BIN} config --global --get user.email).to_s.chomp
+    } 
+  end
+
   
 end

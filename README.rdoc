@@ -1,35 +1,50 @@
 = gitswitch
 
-Easily switch your current git user info.  Handy for work and personal repositories.  Also might come in handy for switching between users while pair programming.
+Easily set/switch your current git user info for a git repo .git/config or your global ~/.gitconfig file.  
+
+This gem should come in handy if you have work and personal repositories.  It also might help with switching between users while pair programming.
 
 Would you rather type "git config user.email 'me@work.com'", etc. or type "gitswitch -r work"?  If you answered the latter, check out this gem.
 
 == Install
 
-  gem install gitswitch
+  # gem install gitswitch
 
 == Usage
 
 Simply run the script to establish a default ~/.gitswitch file using the git info you already have in your ~/.gitconfig file
-  gitswitch 
+  # gitswitch 
+
+  Gitswitch users file ~/.gitswitch not found.  Would you like to create one? (y/n): y
+  Adding your global .gitconfig user info to the "default" tag...
+  Current git user information:
+    Name:   Joe Alba
+    E-mail: joe@home.com
 
 Add a new git user tag
-  gitswitch -a
+  # gitswitch -a
+
+  Enter a tag to describe this git user entry: work
+  E-mail address: jalba@work.com
+  Name (ENTER to use "Joe Alba"): Joseph M. Alba
 
 Set specific user info to your current git repository by updating .git/config
-  gitswitch -r work  # Update .git/config with your 'work' git user info
-  gitswitch -r       # User info from your 'default' tag is used if you don't specify a tag
+  # gitswitch -r work  # Update .git/config with your 'work' git user info
+  Switching git user to "work" tag for the current repository (Joseph M. Alba <jalba@work.com>).
+
+  # gitswitch -r       # User info from your 'default' tag is used if you don't specify a tag
+  Switching git user to "default" tag for the current repository (Joe Alba <joe@home.com>).
 
 List all the gitswitch user tags/info you have stored
-  gitswitch -l
+  # gitswitch -l
 
   Current git user options --
-	default:
-	  Name:   Joe Alba
-	  E-mail: joe@home.com
-	work:
-	  Name:   Joe Alba
-	  E-mail: jalba@work.com
+  default:
+    Name:   Joe Alba
+    E-mail: joe@home.com
+  work:
+    Name:   Joseph M. Alba
+    E-mail: jalba@work.com
 
 == Copyright
 

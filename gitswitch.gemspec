@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gitswitch}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Joe Alba"]
-  s.date = %q{2010-09-04}
+  s.date = %q{2010-09-05}
   s.default_executable = %q{gitswitch}
   s.description = %q{Do you write code for your employer and for yourself?  Want to easily change the e-mail address associated with your commits for work and home repos?  This gem might help you out.}
   s.email = %q{joe@joealba.com}

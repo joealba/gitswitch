@@ -2,7 +2,7 @@ require 'optparse'
 require 'yaml'
 
 class GitSwitch
-  VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION.yml"
+  VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION"
   GITSWITCH_CONFIG_FILE = File.join ENV["HOME"], ".gitswitch"
   GIT_BIN = '/usr/bin/env git'
   
@@ -211,7 +211,7 @@ class GitSwitch
   
   # Print version information.
   def print_version
-    if fh = File.open('VERSION','r')
+    if fh = File.open(VERSION_FILE,'r')
       puts "GitSwitch " + fh.gets
       fh.close
     else

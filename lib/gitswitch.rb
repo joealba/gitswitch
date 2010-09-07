@@ -1,5 +1,7 @@
 require 'optparse'
 require 'yaml'
+require 'shellwords' if !String.new.methods.include?('shellescape')
+
 
 class GitSwitch
   VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION"

@@ -9,7 +9,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "gitswitch"
     gem.summary = %Q{Easy git user switching}
-    gem.description = %Q{Do you write code for your employer and for yourself?  Want to easily change the e-mail address associated with your commits for work and home repos?  This gem might help you out.}
+    gem.description = %Q{Easily switch your git name/e-mail user info -- Handy for work vs. personal and for pair programming}
     gem.email = "joe@joealba.com"
     gem.homepage = "http://github.com/joealba/gitswitch"
     gem.authors = ["Joe Alba"]

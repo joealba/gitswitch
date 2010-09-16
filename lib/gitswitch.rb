@@ -42,42 +42,48 @@ class GitSwitch
       o.banner = "Usage: gitswitch [options]"
 
       o.on "-l", "--list", "Show all git users you have configured" do
-        list_users and exit
+        list_users
+        exit
       end
 
       o.on "-i", "--info", "Show the current git user info." do
-        print_info and exit
+        print_info
+        exit
       end
 
-      o.on "-s", "--switch [TAG]", String, "Switch git user to the specified tag" do |tag|
+      o.on "-s", "--switch [TAG]", String, "Switch git user to the specified tag in your user's global git configuration" do |tag|
         tag ||= 'default'
-        switch_user tag
+        switch_user(tag)
         print_info
         exit
       end
 
       o.on "-r", "--repo [TAG]", String, "Switch git user to the specified tag for the current directory's git repository" do |tag|
         tag ||= 'default'
-        switch_repo_user tag
+        switch_repo_user(tag)
         exit
       end
 
       o.on "-h", "--help", "Show this help message." do
         print_info
-        puts parser and exit
+        puts parser
+        exit
       end
 
       o.on "-o", "--overwrite", "Overwrite/create a .gitswitch file using your global git user info as default" do
         create_gitswitch_file
-        print_info and exit
+        print_info
+        exit
       end
 
-      o.on "-a", "--add", "Add a new gitswitch entry" do
-        add_gitswitch_entry and exit
+      o.on "-a", "--add [TAG]", "Add a new gitswitch entry" do |tag|
+        add_gitswitch_entry(tag)
+        exit
       end
 
       o.on("-v", "--version", "Show the current version.") do
-        print_version and exit
+        print_version
+        exit
       end      
     end
     
@@ -158,7 +164,7 @@ class GitSwitch
   # Set the git user information for current repository
   # ==== Parameters
   # * +tag+ - The tag associated with your desired git info in .gitswitch. Defaults to "default".
-  def switch_repo_user tag = "default"
+  def switch_repo_user(tag = "default")
     ## TODO: See if we're actually in a git repo
     if user = get_user(tag)
       puts "Switching git user to \"#{tag}\" tag for the current repository (#{user[:name]} <#{user[:email]}>)."
@@ -170,19 +176,24 @@ class GitSwitch
   
   
   # Add a user entry to your .gitswitch file
-  def add_gitswitch_entry
-    print "Enter a tag to describe this git user entry: "
-    tag = gets.gsub(/\W+/,'')
+  def add_gitswitch_entry(tag = '')
+    if (!tag.empty?)
+      tag.gsub!(/\W+/,'')
+    else
+      print "Enter a tag to describe this git user entry: "
+      tag = gets.gsub(/\W+/,'')
+    end
     
     if tag.empty?
       puts "You must enter a short tag to describe the git user entry you would like to save."
       exit
     end
-      
-    print "E-mail address: "
+
+    puts "Adding a new gitswitch user entry for tag '#{tag}'"
+    print "  E-mail address: "
     email = gets.chomp
 
-    print "Name: (ENTER to use \"" + get_git_user_info({:global => true})[:name] + "\") "
+    print "  Name: (ENTER to use \"" + get_git_user_info({:global => true})[:name] + "\") "
     name = gets.chomp
     name = get_git_user_info({:global => true})[:name] if name.empty?
 

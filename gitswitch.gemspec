@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Joe Alba"]
-  s.date = %q{2010-09-07}
+  s.date = %q{2010-09-15}
   s.default_executable = %q{gitswitch}
   s.description = %q{Easily switch your git name/e-mail user info -- Handy for work vs. personal and for pair programming}
   s.email = %q{joe@joealba.com}
@@ -34,6 +34,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Easy git user switching}
+  s.test_files = [
+    "spec/gitswitch_spec.rb",
+     "spec/spec_helper.rb"
+  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

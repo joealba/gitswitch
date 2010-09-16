@@ -213,12 +213,7 @@ class GitSwitch
   
   # Print version information.
   def print_version
-    if fh = File.open(VERSION_FILE,'r')
-      puts "GitSwitch " + fh.gets
-      fh.close
-    else
-      puts "Version information not found"
-    end
+    puts "GitSwitch " + VERSION.to_s
   end
 
   

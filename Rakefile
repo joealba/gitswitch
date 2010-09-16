@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake'
-# require 'rspec/core'
-# require 'rspec/core/rake_task'
+require 'rspec/core'
+require 'rspec/core/rake_task'
 
 
 begin
@@ -34,12 +34,12 @@ Rake::RDocTask.new do |rdoc|
 end
 
 
-# desc 'Default: Run specs'
-# task :default => :spec
-# 
-# desc 'Run specs'
-# RSpec::Core::RakeTask.new(:spec) do |t|
-#   t.pattern = FileList["spec/**/*_spec.rb"]
-# end
+desc 'Default: Run specs'
+task :default => :spec
+
+desc 'Run specs'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = FileList["spec/**/*_spec.rb"]
+end
 
 

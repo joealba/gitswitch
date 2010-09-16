@@ -4,7 +4,6 @@ require 'shellwords' if !String.new.methods.include?('shellescape')
 
 
 class GitSwitch
-  VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION"
   GITSWITCH_CONFIG_FILE = File.join ENV["HOME"], ".gitswitch"
   GIT_BIN = '/usr/bin/env git'
   

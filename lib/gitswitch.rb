@@ -6,6 +6,7 @@ require 'shellwords' if !String.new.methods.include?('shellescape')
 class GitSwitch
   GITSWITCH_CONFIG_FILE = File.join ENV["HOME"], ".gitswitch"
   GIT_BIN = '/usr/bin/env git'
+  VERSION_FILE = File.join File.dirname(__FILE__), "..", "VERSION"
   
 
   def self.run args = ARGV
@@ -223,7 +224,13 @@ class GitSwitch
   
   # Print version information.
   def print_version
-    puts "GitSwitch " + VERSION.to_s
+    if fh = File.open(VERSION_FILE,'r')
+      puts "GitSwitch " + fh.gets
+      fh.close
+    else
+      puts "Version information not found"
+    end    
+    #    puts "GitSwitch " + GitSwitch::VERSION.to_s
   end
 
   

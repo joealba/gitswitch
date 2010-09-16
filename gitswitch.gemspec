@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     ".bundle/config",
      ".document",
      ".gitignore",
+     ".rspec",
      "Gemfile",
      "Gemfile.lock",
      "LICENSE",
@@ -31,7 +32,6 @@ Gem::Specification.new do |s|
      "bin/gitswitch",
      "gitswitch.gemspec",
      "lib/gitswitch.rb",
-     "spec/.rspec",
      "spec/gitswitch_spec.rb",
      "spec/spec_helper.rb"
   ]

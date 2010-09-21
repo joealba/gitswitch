@@ -178,7 +178,7 @@ class GitSwitch
   
   # Add a user entry to your .gitswitch file
   def add_gitswitch_entry(tag = '')
-    if (!tag.empty?)
+    if (!tag.nil? && !tag.empty?)
       tag.gsub!(/\W+/,'')
     else
       print "Enter a tag to describe this git user entry: "

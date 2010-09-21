@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Joe Alba"]
-  s.date = %q{2010-09-16}
+  s.date = %q{2010-09-21}
   s.default_executable = %q{gitswitch}
   s.description = %q{Easily switch your git name/e-mail user info -- Handy for work vs. personal and for pair programming}
   s.email = %q{joe@joealba.com}

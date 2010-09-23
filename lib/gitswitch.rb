@@ -54,7 +54,7 @@ class GitSwitch
 
       o.on "-s", "--switch [TAG]", String, "Switch git user to the specified tag in your user's global git configuration" do |tag|
         tag ||= 'default'
-        switch_user(tag)
+        switch_global_user(tag)
         print_info
         exit
       end

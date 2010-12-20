@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
 
 
 	s.add_dependency('rake')
-#	s.add_dependency('thor')
+	s.add_dependency('thor')
   s.add_development_dependency(%q<rspec>, [">= 2.3.0"])
 
 end

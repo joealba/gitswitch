@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
 
 require "gitswitch"
-GitSwitch.run ARGV
+GitSwitch::CLI.start
+#GitSwitch.run ARGV

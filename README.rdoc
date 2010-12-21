@@ -55,6 +55,9 @@ Delete a current entry
 Update your global .git user instead of your current repository
   # gitswitch global work
 
+== What's with all the aliases?
+
+I initially wrote the gem using optparse and used the '-r' style params to keep the commands as short as possible.  Now, I've decided to lean toward a rake-style descriptive method of passing commands -- which meshes well with the way Thor likes to do things.  But the old command line options still work fine in case you got used to it.
 
 == Copyright
 

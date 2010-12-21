@@ -13,16 +13,32 @@ describe GitSwitch do
     end    
   end
 
-  describe "functionals" do
+
+  describe "read-only" do
     it "should show the current git user credentials" do
+      GitSwitch.current_user_info.should =~ /^Current git user info/
+    end
+  end
+
+
+  describe "write methods" do
+
+    it "should allow you to add a new user entry" do 
       pending
-      # result = GitSwitch.run
-      # result.should =~ /^Current git user info/
     end
 
-    it "should allow you to add a new user credential entry" do 
+    it "should allow you to update a user entry" do 
       pending
     end
+
+    it "should allow you to delete a user entry" do 
+      pending
+    end
+
+  end
+
+
+  describe "git proxy methods" do
     
     it "should allow you to change the global git user credentials" do
       pending

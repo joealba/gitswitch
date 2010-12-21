@@ -20,6 +20,7 @@ class GitSwitch
       puts GitSwitch.current_user_info
     end
 
+
     ######################################################################
     desc "list", "Show all the git user tags you have configured"
     map ["-l","--list"] => :list

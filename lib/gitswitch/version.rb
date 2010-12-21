@@ -1,3 +1,3 @@
-module Gitswitch
+class Gitswitch
 	VERSION = "0.3.0"
 end

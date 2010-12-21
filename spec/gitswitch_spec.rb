@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GitSwitch do
+describe Gitswitch do
 
   describe "basics" do
     it "should have a VERSION" do
@@ -8,7 +8,7 @@ describe GitSwitch do
     end
 
     it "should find the git executable" do
-      result = %x[#{GitSwitch::GIT_BIN} --version]
+      result = %x[#{Gitswitch::GIT_BIN} --version]
       $?.exitstatus.should == 0
     end    
   end
@@ -16,7 +16,7 @@ describe GitSwitch do
 
   describe "read-only" do
     it "should show the current git user credentials" do
-      GitSwitch.current_user_info.should =~ /^Current git user info/
+      Gitswitch.current_user_info.should =~ /^Your git user/
     end
   end
 

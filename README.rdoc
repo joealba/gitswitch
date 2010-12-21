@@ -12,8 +12,8 @@ Would you rather type "git config user.email 'me@work.com'", etc. or type "gitsw
 
 == Usage
 
-Simply run the script to establish a default ~/.gitswitch file using the git info you already have in your ~/.gitconfig file
-  # gitswitch 
+First, establish a default ~/.gitswitch file using the git info you already have in your ~/.gitconfig file
+  # gitswitch init
 
   Gitswitch users file ~/.gitswitch not found.  Would you like to create one? (y/n): y
   Adding your global .gitconfig user info to the "default" tag...
@@ -21,7 +21,7 @@ Simply run the script to establish a default ~/.gitswitch file using the git inf
     Name:   Joe Alba
     E-mail: joe@home.com
 
-Add a new git user tag
+Now, add a new git user tag
   # gitswitch add
 
   Enter a tag to describe this git user entry: work
@@ -46,11 +46,11 @@ List all the gitswitch user tags/info you have stored
     Name:   Joseph M. Alba
     E-mail: jalba@work.com
 
-Update a current entry
-  # gitswitch update
+Update a current entry.  [TAG] parameter is optional.  If omitted, you'll see a list.
+  # gitswitch update [TAG]
 
-Delete a current entry
-  # gitswitch delete
+Delete a current entry.  [TAG] parameter is optional.  If omitted, you'll see a list.
+  # gitswitch delete [TAG]
 
 Update your global .git user instead of your current repository
   # gitswitch global work

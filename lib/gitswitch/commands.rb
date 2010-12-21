@@ -2,7 +2,7 @@ require 'yaml'
 require 'shellwords' if !String.new.methods.include?('shellescape')
 
 
-class GitSwitch
+class Gitswitch
   GITSWITCH_CONFIG_FILE = File.join ENV["HOME"], ".gitswitch"
   GIT_BIN = '/usr/bin/env git'
 
@@ -12,28 +12,21 @@ class GitSwitch
   ##############################################################
   def initialize
     @users = {}
-    if File.exists? GITSWITCH_CONFIG_FILE
+    if Gitswitch::gitswitch_file_exists
       @users = YAML::load_file GITSWITCH_CONFIG_FILE
       if @users.nil?
         puts "Error loading .gitswitch file.  Delete the file and start fresh." 
         exit
       end
-    else
-      print "Gitswitch users file ~/.gitswitch not found.  Would you like to create one? (y/n): "
-      if gets.chomp =~ /^y/i
-        create_gitswitch_file
-      else
-        puts "Ok, that's fine.  Exiting."
-        exit
-      end
     end
   end
-  
+    
 
   ##############################################################
   # Create a .gitswitch file with the current user defaults
-  def create_gitswitch_file
-    user = get_git_user_info({:global => true})
+  def create_fresh_gitswitch_file
+    @users = {}
+    user = Gitswitch::get_git_user_info({:global => true})
     if user[:name].empty? && user[:email].empty?
       puts "ERROR: You must set up a default git user.name and user.email first."
     else
@@ -41,6 +34,10 @@ class GitSwitch
       set_gitswitch_entry('default', user[:email], user[:name])
       save_gitswitch_file
     end
+  end
+
+  def self.gitswitch_file_exists
+    File.exists? GITSWITCH_CONFIG_FILE
   end
 
   def save_gitswitch_file
@@ -65,7 +62,10 @@ class GitSwitch
   end
 
   def delete_gitswitch_entry(tag)
-    throw "Cannot delete the default tag.  Use the update command instead" if tag == 'default'
+    if tag == 'default'
+      puts "Cannot delete the default tag.  Use the update command instead"
+      exit
+    end
     @users.delete(tag)
     save_gitswitch_file
   end
@@ -98,20 +98,23 @@ class GitSwitch
 
   ## Return active user information.
   ## If you're in a git repo, show that user info.  Otherwise, display the global info.
-  def self.current_user_info
-    response = ''
-    current_git_user = get_git_user_info
-    response << "Current git user information:\n"
+  def self.current_user_info(options = {})
+    response = !Gitswitch::in_a_git_repo || options[:global] ? "Your git user information from your global config:\n" : "Your git user information from the current repository:\n"
+    current_git_user = Gitswitch::get_git_user_info(options)
     response << "Name:   #{current_git_user[:name]}\n" 
     response << "E-mail: #{current_git_user[:email]}\n"
     response
   end
 
+  def self.in_a_git_repo
+    %x(#{GIT_BIN} status 2>&1 | head -n 1).to_s =~ /^fatal/i ? false : true
+  end
+
 
   ##############################################################
-  def git_config(user, args = {})
+  def git_config(user, options = {})
     git_args = 'config --replace-all'
-    git_args += ' --global' if args[:global]
+    git_args += ' --global' if options[:global]
   
     %x(#{GIT_BIN} #{git_args} user.email #{user[:email].to_s.shellescape})
     %x(#{GIT_BIN} #{git_args} user.name #{user[:name].to_s.shellescape}) if !user[:name].to_s.empty?
@@ -137,11 +140,16 @@ class GitSwitch
   # * +tag+ - The tag associated with your desired git info in .gitswitch. Defaults to "default".
   def switch_repo_user(tag = "default")
     ## TODO: See if we're actually in a git repo
-    if user = get_user(tag)
-      puts "Switching git user to \"#{tag}\" tag for the current repository (#{user[:name]} <#{user[:email]}>)."
-      git_config(user) or raise "Could not change the git user settings to your repository."
+    if !Gitswitch::in_a_git_repo
+      puts "You do not appear to currently be in a git repository directory"
+      false
     else
-      puts "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
+      if user = get_user(tag)
+        puts "Switching git user to \"#{tag}\" tag for the current repository (#{user[:name]} <#{user[:email]}>)."
+        git_config(user) or raise "Could not change the git user settings to your repository."
+      else
+        puts "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
+      end
     end
   end
 
@@ -150,9 +158,9 @@ class GitSwitch
   private
 
   # Show the current git user info
-  def self.get_git_user_info(args = {})
+  def self.get_git_user_info(options = {})
     git_args = 'config --get'
-    git_args += ' --global' if args[:global]
+    git_args += ' --global' if options[:global]
   
     {
       :name => %x(#{GIT_BIN} #{git_args} user.name).to_s.chomp,

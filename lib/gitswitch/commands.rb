@@ -8,12 +8,14 @@ class GitSwitch
 
   attr_reader :users
 
+
+  ##############################################################
   def initialize
     @users = {}
     if File.exists? GITSWITCH_CONFIG_FILE
       @users = YAML::load_file GITSWITCH_CONFIG_FILE
       if @users.nil?
-        puts "Error loading .gitswitch file" 
+        puts "Error loading .gitswitch file.  Delete the file and start fresh." 
         exit
       end
     else
@@ -27,13 +29,8 @@ class GitSwitch
     end
   end
   
-  
-  def get_tag_display
-    max_length = @users.keys.sort{|x,y| y.length <=> x.length }.first.length
-    @users.each_pair.map {|key,value| sprintf("  %#{max_length}s  %s\n", key, value[:email]) }
-  end
 
-  
+  ##############################################################
   # Create a .gitswitch file with the current user defaults
   def create_gitswitch_file
     user = get_git_user_info({:global => true})
@@ -46,7 +43,6 @@ class GitSwitch
     end
   end
 
-
   def save_gitswitch_file
     if fh = File.open(GITSWITCH_CONFIG_FILE, 'w')
       fh.write(@users.to_yaml)
@@ -57,6 +53,7 @@ class GitSwitch
   end
 
 
+  ##############################################################
   # Set git user parameters for a tag
   # ==== Parameters
   # * +tag+ - Required. The tag you want to add to your .gitswitch file
@@ -73,7 +70,6 @@ class GitSwitch
     save_gitswitch_file
   end
 
-
   def get_user(tag)     
     if !@users.empty? && @users[tag] && !@users[tag].empty?
       @users[tag]
@@ -84,7 +80,35 @@ class GitSwitch
     @users.keys
   end
 
+  def get_tag_display
+    max_length = @users.keys.sort{|x,y| y.length <=> x.length }.first.length
+    @users.each_pair.map {|key,value| sprintf("  %#{max_length}s  %s\n", key, value[:email]) }
+  end
 
+  def list_users
+    response = ''
+    response << "\nCurrent git user options --\n"
+    @users.each do |key, user|
+      response << "#{key}:\n"
+      response << "  Name:   #{user[:name]}\n" if !user[:name].to_s.empty?
+      response << "  E-mail: #{user[:email]}\n\n"
+    end
+    response
+  end
+
+  ## Return active user information.
+  ## If you're in a git repo, show that user info.  Otherwise, display the global info.
+  def self.current_user_info
+    response = ''
+    current_git_user = get_git_user_info
+    response << "Current git user information:\n"
+    response << "Name:   #{current_git_user[:name]}\n" 
+    response << "E-mail: #{current_git_user[:email]}\n"
+    response
+  end
+
+
+  ##############################################################
   def git_config(user, args = {})
     git_args = 'config --replace-all'
     git_args += ' --global' if args[:global]
@@ -94,6 +118,7 @@ class GitSwitch
   end
 
 
+  ##############################################################
   # Switch git user in your global .gitconfig file
   # ==== Parameters
   # * +tag+ - The tag associated with your desired git info in .gitswitch.  Defaults to "default".
@@ -120,28 +145,6 @@ class GitSwitch
     end
   end
 
-
-  def list_users
-    response = ''
-    response << "\nCurrent git user options --\n"
-    @users.each do |key, user|
-      response << "#{key}:\n"
-      response << "  Name:   #{user[:name]}\n" if !user[:name].to_s.empty?
-      response << "  E-mail: #{user[:email]}\n\n"
-    end
-    response
-  end
-
-
-  # Return active account information.
-  def self.current_user_info
-    response = ''
-    current_git_user = get_git_user_info
-    response << "Current git user information:\n"
-    response << "Name:   #{current_git_user[:name]}\n" 
-    response << "E-mail: #{current_git_user[:email]}\n"
-    response
-  end
 
   
   private

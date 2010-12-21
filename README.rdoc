@@ -4,7 +4,7 @@ Easily set/switch your current git user info for a git repo .git/config or your 
 
 This gem should come in handy if you have work and personal repositories.  It also might help with switching between users while pair programming.
 
-Would you rather type "git config user.email 'me@work.com'", etc. or type "gitswitch -r work"?  If you answered the latter, check out this gem.
+Would you rather type "git config user.email 'me@work.com'", etc. or type "gitswitch switch work"?  If you answered the latter, check out this gem.
 
 == Install
 
@@ -22,21 +22,21 @@ Simply run the script to establish a default ~/.gitswitch file using the git inf
     E-mail: joe@home.com
 
 Add a new git user tag
-  # gitswitch -a
+  # gitswitch add
 
   Enter a tag to describe this git user entry: work
   E-mail address: jalba@work.com
   Name (ENTER to use "Joe Alba"): Joseph M. Alba
 
 Set specific user info to your current git repository by updating .git/config
-  # gitswitch -r work  # Update .git/config with your 'work' git user info
+  # gitswitch switch work  # Update .git/config with your 'work' git user info
   Switching git user to "work" tag for the current repository (Joseph M. Alba <jalba@work.com>).
 
-  # gitswitch -r       # User info from your 'default' tag is used if you don't specify a tag
+  # gitswitch switch       # User info from your 'default' tag is used if you don't specify a tag
   Switching git user to "default" tag for the current repository (Joe Alba <joe@home.com>).
 
 List all the gitswitch user tags/info you have stored
-  # gitswitch -l
+  # gitswitch list
 
   Current git user options --
   default:
@@ -45,6 +45,16 @@ List all the gitswitch user tags/info you have stored
   work:
     Name:   Joseph M. Alba
     E-mail: jalba@work.com
+
+Update a current entry
+  # gitswitch update
+
+Delete a current entry
+  # gitswitch delete
+
+Update your global .git user instead of your current repository
+  # gitswitch global work
+
 
 == Copyright
 

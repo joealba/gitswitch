@@ -71,7 +71,7 @@ class Gitswitch
     ######################################################################
     desc "add [TAG]", "Add a new tagged user entry"
     map ["-a","--add"] => :add
-    def add(tag = 'default')
+    def add(tag)
       gs = Gitswitch.new
 
       tag.gsub!(/\W+/,'')

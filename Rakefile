@@ -13,6 +13,5 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.pattern = FileList["spec/**/*_spec.rb"]
 end
 
-task :test do 
-  Rake::Task[:spec].invoke 
-end
+desc 'Run specs'
+task :test => :spec

@@ -54,15 +54,15 @@ class Gitswitch
     method_option :global, :type => :boolean, :aliases => ["-s","--global"] ## To support the deprecated behavior
     method_option :repository, :type => :boolean, :aliases => "-r"
     def switch(tag = 'default')
-      options[:global] ? switch_global(tag) : Gitswitch.new.switch_repo_user(tag)
+      options[:global] ? global(tag) : Gitswitch.new.switch_repo_user(tag)
       puts Gitswitch.current_user_info
     end
 
 
     ######################################################################
-    desc "global [TAG]", "Switch global git user"
-    map "-s" => :switch_global
-    def switch_global(tag = 'default')
+    desc "global [TAG]", "Switch global git user (your ~/.gitconfig file)"
+    map "-s" => :global
+    def global(tag = 'default')
       Gitswitch.new.switch_global_user(tag)
       puts Gitswitch.current_user_info
     end

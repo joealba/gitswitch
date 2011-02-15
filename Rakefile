@@ -13,5 +13,5 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.pattern = FileList["spec/**/*_spec.rb"]
 end
 
-desc 'Run specs'
+desc 'Run specs (alias for Gem Testers)'
 task :test => :spec

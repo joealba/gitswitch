@@ -66,7 +66,7 @@ class Gitswitch
     method_option :repository, :type => :boolean, :aliases => "-r"
     def switch(tag = 'default')
       options[:global] ? global(tag) : Gitswitch.new.switch_repo_user(tag)
-      puts Gitswitch.current_user_info
+      puts Gitswitch.current_user_info(options)
     end
 
 
@@ -75,7 +75,6 @@ class Gitswitch
     map "-s" => :global
     def global(tag = 'default')
       Gitswitch.new.switch_global_user(tag)
-      puts Gitswitch.current_user_info
     end
 
 

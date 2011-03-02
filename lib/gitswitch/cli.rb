@@ -28,7 +28,7 @@ class Gitswitch
         add('default')
       else
         puts "Adding your global .gitconfig user info to the \"default\" tag..."
-        set_gitswitch_entry('default', user[:email], user[:name])
+        Gitswitch::new.set_gitswitch_entry('default', user[:email], user[:name])
       end
 
     end

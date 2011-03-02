@@ -26,14 +26,7 @@ class Gitswitch
   # Create a .gitswitch file with the current user defaults
   def create_fresh_gitswitch_file
     @users = {}
-    user = Gitswitch::get_git_user_info({:global => true})
-    if user[:name].empty? && user[:email].empty?
-      puts "ERROR: You must set up a default git user.name and user.email first."
-    else
-      puts "Adding your global .gitconfig user info to the \"default\" tag..."
-      set_gitswitch_entry('default', user[:email], user[:name])
-      save_gitswitch_file
-    end
+    save_gitswitch_file
   end
 
   def self.gitswitch_file_exists

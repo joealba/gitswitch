@@ -20,6 +20,17 @@ class Gitswitch
           Gitswitch::new.create_fresh_gitswitch_file
         end
       end
+
+      # Grab the current global info to drop into the default slot -- if available
+      user = Gitswitch::get_git_user_info({:global => true})
+      if user[:name].empty? && user[:email].empty?
+        puts "No global git user.name and user.email configurations were found.  Set up a default now."
+        add('default')
+      else
+        puts "Adding your global .gitconfig user info to the \"default\" tag..."
+        set_gitswitch_entry('default', user[:email], user[:name])
+      end
+
     end
 
   

@@ -36,7 +36,7 @@ class Gitswitch
       warn "ERROR: Could not open/write the gitswitch config file: #{gitswitch_config_file}: #{$!}"
       exit
     end
-    @users = load_users
+    @users = nil
   end
 
 

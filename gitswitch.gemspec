@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
 
   s.authors = ["Joe Alba"]
-  s.date = %q{2010-09-27}
+  s.date = %q{2012-04-29}
   s.default_executable = %q{gitswitch}
   s.homepage = %q{http://github.com/joealba/gitswitch}
   s.description = %q{Easily switch your git name/e-mail user info -- Handy for work vs. personal and for pair programming}

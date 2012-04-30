@@ -1,10 +1,6 @@
 ## MAC OS
 .DS_Store
 
-## TEXTMATE
-*.tmproj
-tmtags
-
 ## PROJECT::GENERAL
 coverage
 rdoc
@@ -14,3 +10,4 @@ pkg/*
 Gemfile.lock
 
 ## PROJECT::SPECIFIC
+spec/tmp/.gitswitch

@@ -20,5 +20,15 @@ class Gitswitch
       %x(#{GIT_BIN} #{git_args} user.name #{user[:name].to_s.shellescape}) if !user[:name].to_s.empty?
     end
 
+    def self.get_git_user_info(options = {})
+      git_args = 'config --get'
+      git_args += ' --global' if options[:global]
+    
+      {
+        :name => %x(#{GIT_BIN} #{git_args} user.name).to_s.chomp,
+        :email => %x(#{GIT_BIN} #{git_args} user.email).to_s.chomp
+      } 
+    end
+
   end
 end

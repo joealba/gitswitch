@@ -1,12 +1,10 @@
 require 'yaml'
-require 'shellwords' if !String.new.methods.include?('shellescape')
 
 
 class Gitswitch
   GITSWITCH_CONFIG_FILE = File.join ENV["HOME"], ".gitswitch"
-  GIT_BIN = '/usr/bin/env git'
 
-  attr_reader :users
+  attr_accessor :users
 
 
   ##############################################################
@@ -20,25 +18,24 @@ class Gitswitch
       end
     end
   end
-    
+
 
   ##############################################################
   # Create a .gitswitch file with the current user defaults
   def create_fresh_gitswitch_file
-    @users = {}
-    save_gitswitch_file
+    save_gitswitch_file({})
   end
 
   def self.gitswitch_file_exists
     File.exists? GITSWITCH_CONFIG_FILE
   end
 
-  def save_gitswitch_file
+  def save_gitswitch_file(users_hash)
     if fh = File.open(GITSWITCH_CONFIG_FILE, 'w')
-      fh.write(@users.to_yaml)
+      fh.write(users_hash.to_yaml)
       fh.close
     else
-      puts "ERROR: Could not open/write the gitswitch config file: #{GITSWITCH_CONFIG_FILE}"
+      warn "ERROR: Could not open/write the gitswitch config file: #{GITSWITCH_CONFIG_FILE}"
     end
   end
 
@@ -50,8 +47,8 @@ class Gitswitch
   # * +email+ - Required
   # * +name+ - Required
   def set_gitswitch_entry(tag, email, name)
-    @users[tag] = {:name => name, :email => email}
-    save_gitswitch_file
+    users[tag] = {:name => name, :email => email}
+    save_gitswitch_file(users)
   end
 
   def delete_gitswitch_entry(tag)
@@ -59,29 +56,30 @@ class Gitswitch
       puts "Cannot delete the default tag.  Use the update command instead"
       exit
     end
-    @users.delete(tag)
-    save_gitswitch_file
+    users.delete(tag)
+    save_gitswitch_file(users)
   end
 
-  def get_user(tag)     
-    if !@users.empty? && @users[tag] && !@users[tag].empty?
-      @users[tag]
+  def get_user(tag)
+    ## TODO: Stop coding so defensively.   
+    if !users.empty? && users[tag] && !users[tag].empty?
+      users[tag]
     end
   end
 
   def get_tags
-    @users.keys
+    users.keys
   end
 
   def get_tag_display
-    max_length = @users.keys.sort{|x,y| y.length <=> x.length }.first.length
-    @users.each_pair.map {|key,value| sprintf("  %#{max_length}s  %s\n", key, value[:email]) }
+    max_length = users.keys.sort{|x,y| y.length <=> x.length }.first.length
+    users.each_pair.map {|key,value| sprintf("  %#{max_length}s  %s\n", key, value[:email]) }
   end
 
   def list_users
     response = ''
     response << "\nCurrent git user options --\n"
-    @users.each do |key, user|
+    users.each do |key, user|
       response << "#{key}:\n"
       response << "  Name:   #{user[:name]}\n" if !user[:name].to_s.empty?
       response << "  E-mail: #{user[:email]}\n\n"
@@ -99,18 +97,16 @@ class Gitswitch
     response
   end
 
+
+  ##############################################################
   def self.in_a_git_repo
-    %x(#{GIT_BIN} status 2>&1 | head -n 1).to_s =~ /^fatal/i ? false : true
+    Gitswitch::Git.in_a_git_repo
   end
 
 
   ##############################################################
   def git_config(user, options = {})
-    git_args = 'config --replace-all'
-    git_args += ' --global' if options[:global]
-  
-    %x(#{GIT_BIN} #{git_args} user.email #{user[:email].to_s.shellescape})
-    %x(#{GIT_BIN} #{git_args} user.name #{user[:name].to_s.shellescape}) if !user[:name].to_s.empty?
+    Gitswitch::Git.git_config(user, options)
   end
 
 
@@ -128,11 +124,11 @@ class Gitswitch
   end
 
 
+  ##############################################################
   # Set the git user information for current repository
   # ==== Parameters
   # * +tag+ - The tag associated with your desired git info in .gitswitch. Defaults to "default".
   def switch_repo_user(tag = "default")
-    ## TODO: See if we're actually in a git repo
     if !Gitswitch::in_a_git_repo
       puts "You do not appear to currently be in a git repository directory"
       false
@@ -147,8 +143,8 @@ class Gitswitch
   end
 
 
-  
   private
+
 
   # Show the current git user info
   def self.get_git_user_info(options = {})

@@ -4,45 +4,45 @@ describe Gitswitch do
 
   describe "basics" do
     it "should have a VERSION" do
-      Gitswitch::VERSION.should_not == ''
+      expect(Gitswitch::VERSION).not_to eq ''
     end
   end
 
   describe "read-only" do
-    it "should show the current list of available gitswitch tags" do
-          
+    it "shows the current list of available gitswitch tags" do
+      skip
     end
   end
 
   describe "write methods" do
-    before :each do 
-      Gitswitch.create_fresh_gitswitch_file 
+    before :each do
+      Gitswitch.create_fresh_gitswitch_file
     end
 
-    it "should allow you to add a new user entry" do
+    it "allows you to add a new user entry" do
       initial_user_count = Gitswitch.users.keys.count
       set_test_entry
-      Gitswitch.users.keys.count.should be > initial_user_count
+      expect(Gitswitch.users.keys.count > initial_user_count).to eq true
     end
 
-    it "should allow you to update a user entry" do 
+    it "allows you to update a user entry" do
       set_test_entry
       test_entry = get_test_entry
       Gitswitch.set_gitswitch_entry(test_entry[0], 'testing@test.com', test_entry[2])
-      Gitswitch.get_user(test_entry[0])[:email].should eq('testing@test.com')
-      Gitswitch.get_user(test_entry[0])[:name].should eq(test_entry[2])
+      expect(Gitswitch.get_user(test_entry[0])[:email]).to eq 'testing@test.com'
+      expect(Gitswitch.get_user(test_entry[0])[:name]).to eq test_entry[2]
     end
 
-    it "should allow you to delete a user entry" do 
+    it "allows you to delete a user entry" do
       set_test_entry
       Gitswitch.delete_gitswitch_entry(get_test_entry[0])
-      Gitswitch.users.keys.count.should == 0
+      expect(Gitswitch.users.keys.count).to eq 0
     end
 
-    it "should allow you to overwrite the current .gitswitch file and start fresh" do
+    it "allows you to overwrite the current .gitswitch file and start fresh" do
       set_test_entry
-      Gitswitch.create_fresh_gitswitch_file 
-      Gitswitch.users.keys.count.should == 0
+      Gitswitch.create_fresh_gitswitch_file
+      expect(Gitswitch.users.keys.count).to eq 0
     end
 
   end
@@ -50,13 +50,13 @@ describe Gitswitch do
 
   describe "weird outlier cases" do
     it "in a git repo directory with no user info specified, show the global config header and user info" do
-      pending
+      skip
     end
   end
 
 
-  it "should show the current git user credentials" do
-    Gitswitch.current_user_info.should =~ /^Your git user/
+  it "shows the current git user credentials" do
+    expect(Gitswitch.current_user_info).to match /^Your git user/
   end
 
 

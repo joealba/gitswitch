@@ -26,12 +26,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.rubygems_version = %q{1.3.7}
-
 
 	s.add_dependency('rake')
 	s.add_dependency('thor')
-  s.add_development_dependency(%q<rspec>, [">= 2.5.0"])
+  s.add_development_dependency(%q<rspec>, [">= 3.3.0"])
 
 end
 

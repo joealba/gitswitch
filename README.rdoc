@@ -1,6 +1,6 @@
 = gitswitch
 
-[![Build Status](https://travis-ci.org/joealba/gitswitch.svg?branch=master)](https://travis-ci.org/joealba/gitswitch)
+{<img src="https://travis-ci.org/joealba/gitswitch.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/joealba/gitswitch]
 
 Easily set/switch your current git user info for a git repo .git/config or your global ~/.gitconfig file.
 

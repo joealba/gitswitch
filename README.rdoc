@@ -1,6 +1,8 @@
 = gitswitch
 
-Easily set/switch your current git user info for a git repo .git/config or your global ~/.gitconfig file.  
+[![Build Status](https://travis-ci.org/joealba/gitswitch.svg?branch=master)](https://travis-ci.org/joealba/gitswitch)
+
+Easily set/switch your current git user info for a git repo .git/config or your global ~/.gitconfig file.
 
 This gem should come in handy if you have work and personal repositories.  It also might help with switching between users while pair programming.
 

@@ -2,9 +2,9 @@ env:
   global:
     - CC_TEST_REPORTER_ID=55e5e6cc33c440a5d083c50f6cebe30dfaf8d4966da513c62c2046ffc32a7a26
 rvm:
-  - 2.2.9
-  - 2.3.6
-  - 2.4.3
+  - 3.0.0
+  - 2.7.2
+  - 2.6.6
 before_install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter

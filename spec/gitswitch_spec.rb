@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Gitswitch do
-
   describe "basics" do
     it "should have a VERSION" do
       expect(Gitswitch::VERSION).not_to eq ''
@@ -44,9 +43,7 @@ describe Gitswitch do
       Gitswitch.create_fresh_gitswitch_file
       expect(Gitswitch.users.keys.count).to eq 0
     end
-
   end
-
 
   describe "weird outlier cases" do
     it "in a git repo directory with no user info specified, show the global config header and user info" do
@@ -54,10 +51,7 @@ describe Gitswitch do
     end
   end
 
-
   it "shows the current git user credentials" do
     expect(Gitswitch.current_user_info).to match /^Your git user/
   end
-
-
 end

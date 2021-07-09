@@ -9,5 +9,4 @@ describe Gitswitch::Git do
   it "grabs the local git version" do
     expect(Gitswitch::Git.version).to match /^\d+\.+\d+/ # Should start off looking like a version number
   end
-
 end

@@ -53,7 +53,7 @@ Delete a current entry.  [TAG] parameter is optional.  If omitted, you'll see a 
   # gitswitch delete [TAG]
 
 Update your global .git user instead of your current repository
-  # gitswitch global work
+  # gitswitch switch work --global
 
 Show your current git user info.  If you are in a git repo directory, it will show you the info associated with the current repository.  Outside a repo (or if you use the --global option), it will show you the info from your global .git config.
   # gitswitch info

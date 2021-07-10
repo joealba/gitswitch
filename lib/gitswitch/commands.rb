@@ -1,7 +1,7 @@
 require 'yaml'
 
-class Gitswitch
-  def self.gitswitch_config_file 
+module Gitswitch
+  def self.gitswitch_config_file
     ENV['GITSWITCH_CONFIG_FILE'] || File.join(ENV["HOME"], ".gitswitch")
   end
 
@@ -47,7 +47,7 @@ class Gitswitch
   # * +email+ - Required
   # * +name+ - Required
   def self.set_gitswitch_entry(tag, email, name)
-    users[tag] = {:name => name, :email => email}
+    users[tag] = {name: name, email: email}
     save_gitswitch_file(users)
   end
 
@@ -61,7 +61,7 @@ class Gitswitch
   end
 
   def self.get_user(tag)
-    ## TODO: Stop coding so defensively.   
+    ## TODO: Stop coding so defensively.
     if !users.empty? && users[tag] && !users[tag].empty?
       users[tag]
     end
@@ -72,28 +72,30 @@ class Gitswitch
   end
 
   def self.get_tag_display
-    max_length = users.keys.sort{|x,y| y.length <=> x.length }.first.length
-    users.each_pair.map {|key,value| sprintf("  %#{max_length}s  %s\n", key, value[:email]) }
+    users.map do |key, user|
+      item = "#{key}:\n"
+      item << "  Name:   #{user[:name]}\n" if !user[:name].to_s.empty?
+      item << "  E-mail: #{user[:email]}\n"
+      item
+    end.join("\n")
   end
 
   def self.list_users
-    response = ''
-    response << "\nCurrent git user options --\n"
-    users.each do |key, user|
-      response << "#{key}:\n"
-      response << "  Name:   #{user[:name]}\n" if !user[:name].to_s.empty?
-      response << "  E-mail: #{user[:email]}\n\n"
-    end
+    response = "\nCurrent git user options --\n"
+    response << get_tag_display
+
     response
   end
 
   ## Return active user information.
   ## If you're in a git repo, show that user info.  Otherwise, display the global info.
   def self.current_user_info(options = {})
-    response = !Gitswitch::in_a_git_repo || options[:global] ? "Your git user information from your global config:\n" : "Your git user information from the current repository:\n"
     current_git_user = Gitswitch::get_git_user_info(options)
-    response << "Name:   #{current_git_user[:name]}\n" 
+
+    response = !Gitswitch::in_a_git_repo || options[:global] ? "Your git user information from your global config:\n" : "Your git user information from the current repository:\n"
+    response << "Name:   #{current_git_user[:name]}\n"
     response << "E-mail: #{current_git_user[:email]}\n"
+
     response
   end
 
@@ -105,7 +107,7 @@ class Gitswitch
   def self.switch_global_user(tag = "default")
     if user = get_user(tag)
       puts "Switching your .gitconfig user info to \"#{tag}\" tag (#{user[:name]} <#{user[:email]}>)."
-      git_config(user, {:global => true})
+      git_config(user, {global: true})
     else
       puts "ERROR: Could not find info for tag \"#{tag}\" in your .gitswitch file"
     end
@@ -130,7 +132,6 @@ class Gitswitch
     end
   end
 
-
   ##############################################################
   # TODO: Straight delegation through to Gitswitch::Git
   def self.in_a_git_repo
@@ -144,5 +145,4 @@ class Gitswitch
   def self.get_git_user_info(options = {})
     Gitswitch::Git.get_git_user_info(options)
   end
-
 end

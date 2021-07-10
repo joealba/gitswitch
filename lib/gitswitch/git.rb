@@ -1,7 +1,7 @@
 require 'shellwords' if !String.new.methods.include?('shellescape')
 
-class Gitswitch
-  class Git
+module Gitswitch
+  module Git
     GIT_BIN = '/usr/bin/env git'
 
     def self.version
@@ -15,7 +15,7 @@ class Gitswitch
     def self.git_config(user, options = {})
       git_args = 'config --replace-all'
       git_args += ' --global' if options[:global]
-    
+
       %x(#{GIT_BIN} #{git_args} user.email #{user[:email].to_s.shellescape})
       %x(#{GIT_BIN} #{git_args} user.name #{user[:name].to_s.shellescape}) if !user[:name].to_s.empty?
     end
@@ -23,12 +23,11 @@ class Gitswitch
     def self.get_git_user_info(options = {})
       git_args = 'config --get'
       git_args += ' --global' if options[:global]
-    
-      {
-        :name => %x(#{GIT_BIN} #{git_args} user.name).to_s.chomp,
-        :email => %x(#{GIT_BIN} #{git_args} user.email).to_s.chomp
-      } 
-    end
 
+      {
+        name: %x(#{GIT_BIN} #{git_args} user.name).to_s.chomp,
+        email: %x(#{GIT_BIN} #{git_args} user.email).to_s.chomp
+      }
+    end
   end
 end

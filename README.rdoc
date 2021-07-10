@@ -1,7 +1,5 @@
 = gitswitch
 
-{<img src="https://travis-ci.org/joealba/gitswitch.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/joealba/gitswitch]
-
 Easily set/switch your current git user info for a git repo .git/config or your global ~/.gitconfig file.
 
 This gem should come in handy if you have work and personal repositories.  It also might help with switching between users while pair programming.
@@ -63,11 +61,3 @@ Show your current git user info.  If you are in a git repo directory, it will sh
 == What's with all the aliases for each task?
 
 I initially wrote the gem using optparse and used the '-r' style params to keep the commands as short as possible.  Now, I've decided to lean toward a rake-style descriptive method of passing commands -- which meshes well with the way Thor likes to do things.  But the old command line options still work fine in case you got used to it.
-
-== Recent changes (2012 edition)
-
-I've learned a few things, taken some inspiration from David Copeland's "Build Awesome Command-Line Applications in Ruby" book, and stolen the idea of making everything a class method from Hashrocket's hitch gem.
-
-In Ruby 1.9, command line argument strings get frozen, which makes gsub! unhappy.  I wasn't on 1.9 two years ago, and my tests are far too incomplete for Travis CI to catch this bug.  But alas, it is now fixed.
-
-I've made the first steps toward returning reasonable exit status codes.  A failed git command will not yet throw a proper exit code.

@@ -24,7 +24,7 @@ module Gitswitch
   end
 
   def self.gitswitch_file_exists
-    File.exists? gitswitch_config_file
+    File.exist? gitswitch_config_file
   end
 
   def self.save_gitswitch_file(users_hash)
